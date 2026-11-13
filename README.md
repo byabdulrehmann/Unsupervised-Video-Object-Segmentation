@@ -24,6 +24,21 @@ We aim to segment primary foreground objects in videos without manual annotation
 - Flow-guided supervision  
 - No ground-truth masks required
 
+## 🏗️ Architecture
+
+![VISE architecture](docs/architecture.png)
+
+- **Two-stream encoder.** RGB frames and their optical-flow maps (512 × 512 × 3) are encoded
+  by two parallel encoders, each producing features at four levels (l1 to l4).
+- **Cross-modal contrastive learning.** At every level, the appearance (RGB) and motion
+  (flow) features are aligned with a contrastive loss (L_CL), so the network learns which
+  regions move together as one object.
+- **Attention-guided decoder.** Skip connections from both encoders feed a decoder refined
+  by CBAM (Convolutional Block Attention Module): channel attention followed by spatial
+  attention.
+- **Output.** The decoder's scores pass through a softmax to produce the segmentation
+  mask, compared with the reference mask through a cross-entropy loss (L_CE).
+
 ## 🛠️ Tech Stack
 
 - Python, PyTorch  
